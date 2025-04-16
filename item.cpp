@@ -89,9 +89,10 @@ void addItem(Bill& b) {
 void printBill() {
     system("cls");
     ifstream in("Bill.csv");
+    ofstream txtOut("Bill.txt");  // Open Bill.txt to store formatted bill
 
-    if (!in) {
-        cout << "No bill found. Please add items first." << endl;
+    if (!in || !txtOut) {
+        cout << "❌ Error: Could not open Bill.csv or Bill.txt!" << endl;
         Sleep(2000);
         return;
     }
@@ -99,15 +100,24 @@ void printBill() {
     string line;
     double total = 0;
 
-    // Print Header for the bill
-    cout << "Supermarket Bill" << endl;
-    cout << "------------------------------------------------------------------------------------" << endl;
+    // Print and Write Header
+    cout << "🧾 SUPERMARKET RECEIPT" << endl;
+    cout << "-------------------------------------------------------------" << endl;
     cout << left << setw(25) << "Item"
          << setw(10) << "Rate"
          << setw(10) << "Qty"
          << setw(15) << "Amount"
          << setw(20) << "Timestamp" << endl;
-    cout << "-------------------------------------------------------------------------------------" << endl;
+    cout << "-------------------------------------------------------------" << endl;
+    
+    txtOut << "🧾 SUPERMARKET RECEIPT" << endl;
+    txtOut << "-------------------------------------------------------------" << endl;
+    txtOut << left << setw(25) << "Item"
+           << setw(10) << "Rate"
+           << setw(10) << "Qty"
+           << setw(15) << "Amount"
+           << setw(20) << "Timestamp" << endl;
+    txtOut << "-------------------------------------------------------------" << endl;
 
     while (getline(in, line)) {
         stringstream ss(line);
@@ -120,21 +130,34 @@ void printBill() {
 
         int rate = stoi(rateStr);
         int qty = stoi(qtyStr);
-        double amount = rate * qty;  // Calculate amount for each item
+        int amount = rate * qty;
         total += amount;
 
-        // Print formatted output with correct spacing
+        // Print and Write each row properly formatted
         cout << left << setw(25) << name
-     << setw(10) << rate
-     << setw(10) << qty
-     << setw(15) << "KShs." + to_string(static_cast<int>(amount))  // Concatenates currency with value
-     << setw(20) << timestamp << endl;
+             << setw(10) << rate
+             << setw(10) << qty
+             << setw(15) << "KShs." + to_string(amount)  
+             << setw(20) << timestamp << endl;
+
+        txtOut << left << setw(25) << name
+               << setw(10) << rate
+               << setw(10) << qty
+               << setw(15) << "KShs." + to_string(amount)  
+               << setw(20) << timestamp << endl;
     }
 
-    cout << "-------------------------------------------------------------------------------------" << endl;
-    cout << right << setw(50) << "Total: KSh " << fixed << setprecision(2) << total << endl;
+    // Print and Write Total
+    cout << "-------------------------------------------------------------" << endl;
+    cout << right << setw(50) << "Total: KShs." << total << endl;
+
+    txtOut << "-------------------------------------------------------------" << endl;
+    txtOut << right << setw(50) << "Total: KShs." << total << endl;
 
     in.close();
+    txtOut.close();
+
+    cout << "\n✅ Bill successfully saved to `Bill.txt`. You can now print or email it to clients!" << endl;
     system("pause");
 }
 
