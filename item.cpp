@@ -59,31 +59,47 @@ void addItem(Bill& b) {
     if (cin.fail()) {
         cin.clear();
         cin.ignore(numeric_limits<streamsize>::max(), '\n');
-        cout << "Invalid quantity. Please enter a number." << endl;
+        cout << "❌ Invalid quantity. Please enter a number." << endl;
         Sleep(2000);
         return;
     }
 
-    // Set timestamp for the item
     string timestamp = getCurrentTimestamp();
     b.setItem(item);
     b.setRate(rate);
     b.setQuant(quant);
     b.setTimestamp(timestamp);
 
-    // Writing item details to a CSV file
-    ofstream out("Bill.csv", ios::app);
-    if (!out) {
-        cout << "Error: Could not open Bill.csv!" << endl;
+    // **Overwrite Bill.txt to start fresh for new clients**
+    ofstream txtOut("Bill.txt", ios::trunc);  // `ios::trunc` clears the file before writing
+    if (!txtOut) {
+        cout << "❌ Error: Could not open Bill.txt!" << endl;
         Sleep(2000);
         return;
     }
 
-    // Write item details to CSV file: Item, Rate, Quantity, Timestamp
-    out << b.getItem() << "," << b.getRate() << "," << b.getQuant() << "," << b.getTimestamp() << endl;
-    out.close();
+    // Write headers for the new receipt
+    txtOut << "🌟 Hellen's Supermarket 🌟\n";
+    txtOut << "--------------------------------------------------------------------------\n";
+    txtOut << left << setw(25) << "Item"
+           << setw(10) << "Rate"
+           << setw(10) << "Qty"
+           << setw(15) << "Amount"
+           << setw(20) << "Timestamp" << endl;
+    txtOut << "--------------------------------------------------------------------------\n";
 
-    cout << "Item successfully written to Bill.csv!" << endl;
+    // Write the single item details to the receipt
+    txtOut << left << setw(25) << b.getItem()
+           << setw(10) << b.getRate()
+           << setw(10) << b.getQuant()
+           << setw(15) << "KShs." + to_string(b.getRate() * b.getQuant())
+           << setw(20) << b.getTimestamp() << endl;
+
+    txtOut << "---------------------------------------------------------------------------\n";
+    txtOut << "✨ Thank you for shopping with us! Happy Shopping! ✨\n";
+    txtOut.close();
+
+    cout << "A fresh receipt has been generated in Bill.txt for the new client!" << endl;
     Sleep(2000);
 }
 void printBill() {
@@ -92,32 +108,35 @@ void printBill() {
     ofstream txtOut("Bill.txt");  // Open Bill.txt to store formatted bill
 
     if (!in || !txtOut) {
-        cout << "❌ Error: Could not open Bill.csv or Bill.txt!" << endl;
+        cout << "Error: Could not open Bill.csv or Bill.txt!" << endl;
         Sleep(2000);
         return;
     }
 
+    string supermarketName = "Hellen's Supermarket ";  // Customize this with your store name!
+    string thankYouMessage = "Thank you for shopping with us! Happy Shopping!";  // Footer message
+
     string line;
     double total = 0;
 
-    // Print and Write Header
-    cout << "🧾 SUPERMARKET RECEIPT" << endl;
-    cout << "-------------------------------------------------------------" << endl;
+    // Print and Write Header (Supermarket Name + Table Headers)
+    cout << supermarketName << endl;
+    cout << "-----------------------------------------------------------------------------------------" << endl;
     cout << left << setw(25) << "Item"
          << setw(10) << "Rate"
          << setw(10) << "Qty"
          << setw(15) << "Amount"
          << setw(20) << "Timestamp" << endl;
-    cout << "-------------------------------------------------------------" << endl;
+    cout << "-------------------------------------------------------------------------------------------" << endl;
     
-    txtOut << "🧾 SUPERMARKET RECEIPT" << endl;
-    txtOut << "-------------------------------------------------------------" << endl;
+    txtOut << supermarketName << endl;
+    txtOut << "-------------------------------------------------------------------------------------------" << endl;
     txtOut << left << setw(25) << "Item"
            << setw(10) << "Rate"
            << setw(10) << "Qty"
            << setw(15) << "Amount"
            << setw(20) << "Timestamp" << endl;
-    txtOut << "-------------------------------------------------------------" << endl;
+    txtOut << "---------------------------------------------------------------------------------------------" << endl;
 
     while (getline(in, line)) {
         stringstream ss(line);
@@ -148,11 +167,15 @@ void printBill() {
     }
 
     // Print and Write Total
-    cout << "-------------------------------------------------------------" << endl;
+    cout << "----------------------------------------------------------------------------------------------" << endl;
     cout << right << setw(50) << "Total: KShs." << total << endl;
+    cout << "-----------------------------------------------------------------------------------------------" << endl;
+    cout << thankYouMessage << endl;  // Print the thank you message at the bottom
 
-    txtOut << "-------------------------------------------------------------" << endl;
+    txtOut << "---------------------------------------------------------------------------------------------" << endl;
     txtOut << right << setw(50) << "Total: KShs." << total << endl;
+    txtOut << "----------------------------------------------------------------------------------------------" << endl;
+    txtOut << thankYouMessage << endl;  // Write the thank you message in Bill.txt
 
     in.close();
     txtOut.close();
@@ -160,7 +183,6 @@ void printBill() {
     cout << "\n✅ Bill successfully saved to `Bill.txt`. You can now print or email it to clients!" << endl;
     system("pause");
 }
-
 int main() {
     Bill b;
     bool exit = false;
