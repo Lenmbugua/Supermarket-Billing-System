@@ -157,7 +157,7 @@ int main() {
         if (cin.fail()) {
             cin.clear();
             cin.ignore(numeric_limits<streamsize>::max(), '\n');
-            cout << "❌ Invalid input. Please enter a number." << endl;
+            cout << "Invalid input. Please enter a number." << endl;
             Sleep(2000);
             continue;
         }
@@ -168,10 +168,10 @@ int main() {
             printBill();
         } else if (val == 3) {
             exit = true;
-            cout << "👋 Exiting the system..." << endl;
+            cout << "Exiting the system..." << endl;
             Sleep(1500);
         } else {
-            cout << "❌ Invalid choice. Please try again." << endl;
+            cout << "Invalid choice. Please try again." << endl;
             Sleep(2000);
         }
     }
