@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register - Supermarket Billing</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-image: url('wallpaper.jpg'); /* Replace with your actual image */
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .register-box {
+            background: rgba(0, 0, 0, 0.7);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0px 4px 8px rgba(0,0,0,0.3);
+            width: 300px;
+            text-align: center;
+        }
+
+        h1 {
+            margin-bottom: 15px;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            margin: 8px 0;
+            border-radius: 5px;
+            border: none;
+            text-align: center;
+        }
+
+        button {
+            width: 100%;
+            padding: 10px;
+            cursor: pointer;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            transition: 0.3s;
+            background-color: #28a745;
+            color: white;
+        }
+
+        button:hover {
+            background-color: #1e7e34;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="register-box">
+        <h1>📝 Register</h1>
+        <input type="text" placeholder="Username" id="regUsername">
+        <input type="password" placeholder="Password" id="regPassword">
+        <button onclick="register()">Register</button>
+        <p>Already have an account? <a href="login.html">Login here</a></p>
+    </div>
+
+    <!-- JavaScript for Registration -->
+    <script>
+        function register() {
+            let user = document.getElementById("regUsername").value;
+            let pass = document.getElementById("regPassword").value;
+
+            let xhr = new XMLHttpRequest();
+            xhr.open("POST", "register.php", true);
+            xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState == 4 && xhr.status == 200) {
+                    alert(xhr.responseText);
+                    if (xhr.responseText.includes("✅ Registration successful")) {
+                        window.location.href = "login.html"; // Redirect to login page
+                    }
+                }
+            };
+            xhr.send("username=" + user + "&password=" + pass);
+        }
+    </script>
+
+</body>
+</html>

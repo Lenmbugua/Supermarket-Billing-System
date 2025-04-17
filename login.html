@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login & Register - Supermarket Billing</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-image: url('C:/xampp/htdocs/supermarket_billing/cart-supermarket-shopping-cart-supermarket-cart-supermarket_594776-4513.avif'); /* Replace with your actual image */
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .auth-box {
+            background: rgba(0, 0, 0, 0.7);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0px 4px 8px rgba(0,0,0,0.3);
+            width: 300px;
+            text-align: center;
+        }
+
+        h1 {
+            margin-bottom: 15px;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            margin: 8px 0;
+            border-radius: 5px;
+            border: none;
+            text-align: center;
+        }
+
+        button {
+            width: 100%;
+            padding: 10px;
+            cursor: pointer;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            transition: 0.3s;
+        }
+
+        .login-btn {
+            background-color: #007BFF;
+            color: white;
+        }
+
+        .register-btn {
+            background-color: #28a745;
+            color: white;
+        }
+
+        .toggle-link {
+            cursor: pointer;
+            color: #ffc107;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="auth-box">
+        <h1 id="formTitle">🔐 Login</h1>
+        <input type="text" placeholder="Username" id="username">
+        <input type="password" placeholder="Password" id="password">
+        <button class="login-btn" onclick="submitForm()">Login</button>
+        <p class="toggle-link" onclick="toggleForm()">New user? Register here</p>
+    </div>
+
+    <!-- JavaScript for Dynamic Login/Register -->
+    <script>
+        let isLoginMode = true;
+
+        function toggleForm() {
+            isLoginMode = !isLoginMode;
+            document.getElementById("formTitle").innerText = isLoginMode ? "🔐 Login" : "📝 Register";
+            document.querySelector(".login-btn").innerText = isLoginMode ? "Login" : "Register";
+        }
+
+        function submitForm() {
+            let user = document.getElementById("username").value;
+            let pass = document.getElementById("password").value;
+            let endpoint = isLoginMode ? "login.php" : "register.php"; // Toggle between login & register
+
+            let xhr = new XMLHttpRequest();
+            xhr.open("POST", endpoint, true);
+            xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState == 4 && xhr.status == 200) {
+                    alert(xhr.responseText);
+                    if (xhr.responseText.includes("✅ Login successful")) {
+                        window.location.href = "index.html"; // Redirect to dashboard
+                    }
+                }
+            };
+            xhr.send("username=" + user + "&password=" + pass);
+        }
+    </script>
+
+</body>
+</html>

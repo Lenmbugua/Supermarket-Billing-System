@@ -59,7 +59,7 @@ void addItem(Bill& b) {
     if (cin.fail()) {
         cin.clear();
         cin.ignore(numeric_limits<streamsize>::max(), '\n');
-        cout << "❌ Invalid quantity. Please enter a number." << endl;
+        cout << "Invalid quantity. Please enter a number." << endl;
         Sleep(2000);
         return;
     }
@@ -73,13 +73,13 @@ void addItem(Bill& b) {
     // **Overwrite Bill.txt to start fresh for new clients**
     ofstream txtOut("Bill.txt", ios::trunc);  // `ios::trunc` clears the file before writing
     if (!txtOut) {
-        cout << "❌ Error: Could not open Bill.txt!" << endl;
+        cout << "Error: Could not open Bill.txt!" << endl;
         Sleep(2000);
         return;
     }
 
     // Write headers for the new receipt
-    txtOut << "🌟 Hellen's Supermarket 🌟\n";
+    txtOut << "Hellen's Supermarket\n";
     txtOut << "--------------------------------------------------------------------------\n";
     txtOut << left << setw(25) << "Item"
            << setw(10) << "Rate"
@@ -96,7 +96,7 @@ void addItem(Bill& b) {
            << setw(20) << b.getTimestamp() << endl;
 
     txtOut << "---------------------------------------------------------------------------\n";
-    txtOut << "✨ Thank you for shopping with us! Happy Shopping! ✨\n";
+    txtOut << "Thank you for shopping with us! Happy Shopping!\n";
     txtOut.close();
 
     cout << "A fresh receipt has been generated in Bill.txt for the new client!" << endl;
@@ -180,7 +180,7 @@ void printBill() {
     in.close();
     txtOut.close();
 
-    cout << "\n✅ Bill successfully saved to `Bill.txt`. You can now print or email it to clients!" << endl;
+    cout << "\nBill successfully saved to `Bill.txt`. You can now print or email it to clients!" << endl;
     system("pause");
 }
 int main() {
